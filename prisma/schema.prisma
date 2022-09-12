@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -22,11 +22,40 @@ model User {
   @@map("users")
 }
 
-model Character {
+model Personaje {
   id        Int      @id @default(autoincrement())
-  name      String
+  imagen    String
+  nombre    String
+  edad      Int
+  Peso      Float
+  historia  String
+  p_s_asociada  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("characters")
+  @@map("personajes")
 }
+
+model Pelicula {
+  id        Int      @id @default(autoincrement())
+  imagen    String
+  titulo    String
+  fecha_ini       String
+  calificacion    Float 
+  psnjs_asociado  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("peliculas")
+}
+
+model Genero {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  imagen    String
+  p_s_asociada    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("generos")
+}
+
