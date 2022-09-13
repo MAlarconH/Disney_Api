@@ -3,10 +3,12 @@ import { PersonajesRouter } from "../components";
 import { PeliculasRouter } from "../components";
 import { GenerosRouter } from "../components";
 import { OnRouter } from "../components";
+import { CharactersRouter } from "../components";
 
 // cada vez que quiera agregar unaruta nueva,
 // creo el path e importo el componente
 const listRoutes = [
+  ["/character", CharactersRouter],
   ["/test", TestRouter],
   ["/on", OnRouter],
   ["/personajes", PersonajesRouter], 
