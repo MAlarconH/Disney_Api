@@ -29,7 +29,7 @@ model Personaje {
   edad      Int
   Peso      Float
   historia  String
-  p_s_asociada  String
+  peliculas PeliculasOnPersonajes[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -37,25 +37,48 @@ model Personaje {
 }
 
 model Pelicula {
-  id        Int      @id @default(autoincrement())
-  imagen    String
-  titulo    String
-  fecha_ini       String
-  calificacion    Float 
-  psnjs_asociado  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  imagen        String
+  titulo        String
+  fecha_ini     String
+  calificacion  Float 
+  personajes    PeliculasOnPersonajes[]
+  generos       GenerosOnPeliculas[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@map("peliculas")
 }
 
+model PeliculasOnPersonajes {
+  pelicula      Pelicula  @relation(fields: [peliculaId], references: [id])
+  peliculaId    Int
+  personaje     Personaje @relation(fields: [personajeId], references: [id])
+  personajeId   Int 
+  assignedAt    DateTime @default(now())
+
+  @@id([peliculaId, personajeId])
+  @@map("peliculas_personajes")
+}
+
 model Genero {
-  id        Int      @id @default(autoincrement())
-  nombre    String
-  imagen    String
-  p_s_asociada    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int       @id @default(autoincrement())
+  nombre      String
+  imagen      String
+  peliculaId  Int
+  peliculas   GenerosOnPeliculas[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   @@map("generos")
 }
 
+model GenerosOnPeliculas {
+  genero      Genero  @relation(fields: [generoId], references: [id])
+  generoId    Int
+  pelicula    Pelicula  @relation(fields: [peliculaId], references: [id])
+  peliculaId  Int
+  assignedAt  DateTime @default(now())
+
+  @@id([generoId, peliculaId])
+  @@map("generos_peliculas")
+}
