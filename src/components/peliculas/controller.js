@@ -47,18 +47,16 @@ export const findAll = async (req, res) => {
       );
       found = personaje_movies
     }else{
-      const peliculas = await prisma.personaje.findMany({
+      const peliculas = await prisma.pelicula.findMany({
         select: {
           id: true,
           imagen: true,
-          nombre: true,
+          titulo: true,
+          fecha_ini: true,
         },
       });
       found = peliculas
     }
-  
-    
-      
   
     res.json({
       ok: true,
@@ -70,33 +68,14 @@ export const findAll = async (req, res) => {
         data: error.message,
       });
     }
-
-  try {
-    const users = await prisma.pelicula.findMany({
-        select: {
-          id: true,
-          titulo: true,
-          imagen: true,
-          fecha_ini: true,
-        },
-      }
-    );
-    res.json({
-      ok: true,
-      data: users,
-    });
-  } catch (error) {
-    res.json({
-      ok: false,
-      data: error.message,
-    });
-  }
 };
 
 export const detalle = async (req, res) => {
   try {
     
     const id = parseInt(req.params.id)
+
+    let movie_found;
 
     const movies_personajes = await prisma.peliculasOnPersonajes.findMany(
       {
@@ -109,11 +88,28 @@ export const detalle = async (req, res) => {
         }
       }
     );
-    
+
+    if(movies_personajes.length >= 1){
+      movie_found = movies_personajes;
+    }else{
+
+      const movie = await prisma.pelicula.findMany({
+        where: {
+          id: id,
+        },
+        include:{
+          personajes: true
+        }
+      });
+
+
+      movie_found = movie;
+    }
+
     res.json({
       ok: true,
       data: {
-        personaje: movies_personajes,
+        pelicula: movie_found,
       },
     });
   } catch (error) {
@@ -144,3 +140,54 @@ export const create = async (req, res) => {
     });
   }
 };
+
+
+export const update = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id)
+    const { body } = req;
+    body.id = id;
+    const updatePelicula  = await prisma.pelicula.update({
+      where: {
+        id: id,
+      },
+      data: {
+        ...body
+      },
+    })
+
+    res.json({
+      ok: true,
+      data: updatePelicula ,
+    });
+  } catch (error) {
+    res.json({
+      ok: false,
+      data: error.message,
+    });
+  }
+};
+
+export const deleteById = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id)
+  
+    const deletePelicula  = await prisma.pelicula.delete({
+      where: {
+        id: id,
+      }
+    })
+
+    res.json({
+      ok: true,
+      data: deletePelicula ,
+    });
+  } catch (error) {
+    res.json({
+      ok: false,
+      data: error.message,
+    });
+  }
+};
+
+

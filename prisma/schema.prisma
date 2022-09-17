@@ -65,7 +65,6 @@ model Genero {
   id          Int       @id @default(autoincrement())
   nombre      String
   imagen      String
-  peliculaId  Int
   peliculas   GenerosOnPeliculas[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

@@ -66,8 +66,6 @@ export const findAll = async (req, res) => {
   }
 
   
-    
-
   res.json({
     ok: true,
     data: found,
