@@ -1,4 +1,4 @@
-import { TestRouter } from "../components";
+
 import { PersonajesRouter } from "../components";
 import { PeliculasRouter } from "../components";
 import { GenerosRouter } from "../components";
