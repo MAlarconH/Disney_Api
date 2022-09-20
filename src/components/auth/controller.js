@@ -8,14 +8,14 @@ const jwt = require("jsonwebtoken");
 export const signUp = async (req, res) => {
 
   // Logica de registro (Inicio)
-
   try {
+
     // Obtener usuario
-    const { email, password, name, phone_number } = req.body;
+    const { email, name, phone_number, password } = req.body;
 
     // Validando usuario
     if (!(email && password)) {
-      return res.status(400).send("Se requiere todo los campos");
+      return res.status(400).send("Email y password son campos obligatorios.");
     }
 
     // Comprobar si el usuario es existen
@@ -34,7 +34,7 @@ export const signUp = async (req, res) => {
     let encryptedPassword = await bcrypt.hash(password, 10);
 
     //Crear usuario en la base de datos
-    
+
     const user = await prisma.user.create({
       data:{
         name,
@@ -45,15 +45,14 @@ export const signUp = async (req, res) => {
     });
 
     // Crear tocken & expira en 1 hora
-    const token = jwt.sign(
-      { user_id: user._id, email },
-      process.env.TOKEN_KEY,
-      {
-        expiresIn: "1h",
-      }
-    );
+    const token = jwt.sign({ user } , "secret_token");
+      res.json({
+        token
+      })
+    
     // Guardar el tocken del usuario
     user.token = token;
+    console.log (token);
 
     // Retorna usuario
     return res.status(201).json(user);
@@ -83,13 +82,10 @@ export const signIn = async (req, res) => {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       // Crear tocken
-      const token = jwt.sign(
-        { user_id: user._id, email },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "1h",
-        }
-      );
+      const token = jwt.sign({ user } , "secret_token");
+      res.json({
+        token
+      })
 
       // Guardar tocken
       user.token = token;
