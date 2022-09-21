@@ -45,10 +45,10 @@ export const signUp = async (req, res) => {
     });
 
     // Crear tocken & expira en 1 hora
-    const token = jwt.sign({ user } , "secret_token");
+    const token = jwt.sign({ user } , process.env.JWT_ACCESS_SECRET, {expiresIn: '7d'});
       res.json({
         token
-      })
+    })
     
     // Guardar el tocken del usuario
     user.token = token;
@@ -82,7 +82,7 @@ export const signIn = async (req, res) => {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       // Crear tocken
-      const token = jwt.sign({ user } , "secret_token");
+      const token = jwt.sign({ user } , process.env.JWT_ACCESS_SECRET, {expiresIn: '7d'});
       res.json({
         token
       })

@@ -22,10 +22,9 @@ export const findAll = async (req, res) => {
     found = personajes
   }
   else if(age){
-    const edad = parseInt(age)
     const personajes = await prisma.personaje.findMany({
       where: {
-        edad: edad,
+        edad: age,
       },
       select: {
         id: true,
@@ -119,6 +118,7 @@ export const detalle = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error);
     res.json({
       ok: false,
       data: error.message,
@@ -139,6 +139,7 @@ export const create = async (req, res) => {
       data: user,
     });
   } catch (error) {
+    console.log(error.message);
     res.json({
       ok: false,
       data: error.message,

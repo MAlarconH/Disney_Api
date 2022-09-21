@@ -14,8 +14,10 @@ const listRoutes = [
   ["/onpp", OnPPRouter],
   ["/characters", PersonajesRouter], 
   ["/movies", PeliculasRouter], 
-  ["/generos", GenerosRouter]
+  ["/generos", GenerosRouter],
 ];
+
+
 
 export const routes = (app) => {
   listRoutes.forEach(([path, controller]) => {

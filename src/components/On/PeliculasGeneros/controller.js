@@ -31,6 +31,7 @@ export const create = async (req, res) => {
       data: user,
     });
   } catch (error) {
+    console.error(error);
     res.json({
       ok: false,
       data: error.message,

@@ -26,8 +26,8 @@ model Personaje {
   id        Int      @id @default(autoincrement())
   imagen    String
   nombre    String
-  edad      Int
-  Peso      Float
+  edad      String
+  peso      Float
   historia  String
   peliculas PeliculasOnPersonajes[]
   createdAt DateTime @default(now())
