@@ -44,15 +44,17 @@ export const signUp = async (req, res) => {
       }
     });
 
-    // Crear tocken & expira en 1 hora
-    const token = jwt.sign({ user } , process.env.JWT_ACCESS_SECRET, {expiresIn: '7d'});
-      res.json({
-        token
-    })
+    // Crear tocken 
+    const token = jwt.sign(
+      { user_id: user._id, email },
+      process.env.JWT_ACCESS_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
     
     // Guardar el tocken del usuario
     user.token = token;
-    console.log (token);
 
     // Retorna usuario
     return res.status(201).json(user);
@@ -82,16 +84,19 @@ export const signIn = async (req, res) => {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       // Crear tocken
-      const token = jwt.sign({ user } , process.env.JWT_ACCESS_SECRET, {expiresIn: '7d'});
-      res.json({
-        token
-      })
+      const token = jwt.sign(
+        { user_id: user._id, email },
+        process.env.JWT_ACCESS_SECRET,
+        {
+          expiresIn: "7d",
+        }
+      );
 
       // Guardar tocken
       user.token = token;
 
       // Usuario
-      return res.status(200).json(user);
+      return res.status(200).json(`Bienvenido a Api_Disney estimado ${user.name}`);
     }
     return res.status(400).send("Datos incorrectos.");
   } catch (err) {
